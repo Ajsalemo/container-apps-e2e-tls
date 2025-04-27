@@ -1,6 +1,8 @@
 import express, { json, urlencoded } from "express";
+import fs from "fs";
+import https from "https";
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3443;
 // Controllers
 import { homeController } from "./controllers/homeController.js";
 
@@ -16,9 +18,15 @@ app.use(
 app.use(homeController);
 
 try {
-    app.listen(port, () => {
+    const options = {
+        key: fs.readFileSync("./certs/example.com.key"),
+        cert: fs.readFileSync("./certs/example.com.crt"),
+    };
+
+    https.createServer(options, app).listen(port, () => {
         console.log(`Server is listening on port ${port}`);
     });
+
 } catch (error) {
     console.log(`An error has occurred: ${error}`);
 }
