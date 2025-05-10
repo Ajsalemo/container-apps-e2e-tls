@@ -17,7 +17,7 @@ RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interacti
 FROM php:8.3.21-fpm-bookworm
 RUN apt update -y \
     && apt install nginx supervisor -y \
-    && mkdir -p /var/log/php-fpm/
+    && mkdir -p /var/log/php-fpm
 # Set the working directory
 WORKDIR /var/www/html
 COPY --from=build /app .
