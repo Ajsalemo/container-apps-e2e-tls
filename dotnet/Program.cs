@@ -1,7 +1,14 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Net;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel((context, serverOptions) =>
+{
+    serverOptions.Listen(IPAddress.Any, 8080, listenOptions =>
+    {
+        listenOptions.UseHttps("./certs/example.com.pfx", "changeit");
+    });
+});
+
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
